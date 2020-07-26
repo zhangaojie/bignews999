@@ -38,6 +38,26 @@
     </div>
   </div>
 
+  <!-- 模态框 -->
+  <div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title"> 温馨提示:</h4>
+        </div>
+        <div class="modal-body">
+          <p>One fine body&hellip;</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+
   <script>
     //入口函数
     $(function () {
@@ -52,7 +72,9 @@
 
         //1.4 非空判断
         if (username == "" || password == "") {
-          alert('账号或者密码不能为空!');
+          // alert('账号或者密码不能为空!');
+          $('#myModal .modal-body>p').text('账号或者密码不能为空');
+          $('#myModal').modal();  //js代码的方式弹出模态框
           return;
         }
         //1.5 发送ajax请求 完成登录
@@ -68,11 +90,24 @@
             if (info.code == 200) {
               //1.6 如果账号密码没有错误,提示一想登录成功,跳转到首页
 
-              alert('登录成功');
-              window.location.href = './index.html';
+              // alert('登录成功');
+              $('#myModal .modal-body>p').text('登录成功');
+
+              $('#myModal').modal();  //js代码的方式弹出模态框
+              //页面跳转应该放在模态框关闭事件里面后跳转
+              $('#myModal').on('hide.bs.modal', function (e) {
+                //把服务器返回回来的toke令牌保存起来
+                localStorage.setItem('token', info.token);
+                //跳转页面
+                window.location.href = './index.html';
+              })
+
             } else {
               //1.7 如果账号密码有误,提示一下
-              alert('账号或者密码有误')
+              // alert('账号或者密码有误')
+              $('#myModal .modal-body>p').text('账号或者密码有误');
+
+              $('#myModal').modal();  //js代码的方式弹出模态框
             }
           }
         })
