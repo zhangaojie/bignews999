@@ -31,8 +31,8 @@
       <form class="login_form">
         <i class="iconfont icon-user"></i>
         <i class="iconfont icon-key"></i>
-        <input type="text" class="input_txt" placeholder="邮箱/手机号" />
-        <input type="password" class="input_pass" placeholder="密码" />
+        <input type="text" class="input_txt" value="admin" placeholder="邮箱/手机号" />
+        <input type="password" class="input_pass" value="123456" placeholder="密码" />
         <input type="submit" class="input_sub" value="登 录" />
       </form>
     </div>
@@ -69,7 +69,7 @@
         //1.3 获取用户输入的账号密码
         var username = $('.input_txt').val().trim(); //账号
         var password = $('.input_pass').val().trim(); //密码
-
+        console.log(username, password);
         //1.4 非空判断
         if (username == "" || password == "") {
           // alert('账号或者密码不能为空!');
@@ -81,7 +81,8 @@
         $.ajax({
           type: 'post',
           // url: 'http://localhost:8080/api/v1/admin/user/login',
-          url:  BigNew.user_login,
+          url: BigNew.user_login,
+
           data: {
             username: username,
             password: password
@@ -89,7 +90,9 @@
           success: function (info) {
             console.log(info);
             if (info.code == 200) {
+              console.log('11111111111111');
               //1.6 如果账号密码没有错误,提示一想登录成功,跳转到首页
+              localStorage.setItem('token', info.token);
 
               // alert('登录成功');
               $('#myModal .modal-body>p').text('登录成功');
@@ -98,7 +101,7 @@
               //页面跳转应该放在模态框关闭事件里面后跳转
               $('#myModal').on('hide.bs.modal', function (e) {
                 //把服务器返回回来的toke令牌保存起来
-                localStorage.setItem('token', info.token);
+
                 //跳转页面
                 window.location.href = './index.html';
               })
