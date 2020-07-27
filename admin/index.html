@@ -78,25 +78,39 @@
             $.ajax({
                 type: 'get',
                 url: 'http://localhost:8080/api/v1/admin/user/info',
-                headers: {
-                    'Authorization': localStorage.getItem('token')
-                },
-                success: function (info) {
-                    console.log(info);
+                // headers: {
+                //     'Authorization': localStorage.getItem('token')
+                // },
 
-                    if (info.code == 200) {
+                success: function (backData) {
+                    console.log(backData);
+
+                    if (backData.code == 200) {
                         //1.2 个人信息显示在页面上
-                        $('.user_info>span>i').text(info.data.nickname);
-                        $('.user_info > img').attr('src', info.data.userPic);
-                        $('.user_center_link>img').attr('src', info.data.userPic);
+                        $('.user_info>span>i').text(backData.data.nickname);
+                        $('.user_info>img').attr('src', backData.data.userPic);
+                        $('.user_center_link>img').attr('src', backData.data.userPic);
                     }
                 }
+
             });
-            //每一个ajax请求都要设置token令牌,不然人家接口以为你没有登录,那就不给你数据
-            // 每一个ajax请求都要设置token令牌,那就很烦人了
-            // 在一个地方设置 每次发送ajax请求之前都去执行那个地方
-            //我们把这种叫做全局设置
-            //所以全局设置写在jq里面
+
+
+            // 二: 登出系统
+            // 2.1 给登出按钮设置一个点击事件
+            $('.logout').on('click', function (e) {
+                //阻止a标签的默认跳转
+                e.preventDefault();
+                if (confirm('你确定要退出吗?')) {
+                    //删除token
+                    localStorage.removeItem('token');
+                    //跳转到登录页
+                    window.location.href = './login.html';
+
+                }
+            })
+
+
 
         })
     </script>
