@@ -62,14 +62,14 @@
                 <div class="modal-body">
                     <form>
                         <!-- 隐藏域 是用来保存编辑文章类别的 id的-->
-                        <input type="hidden" name="" id="categoryID">
+                        <input type="hidden" name="id" id="categoryID">
                         <div class="form-group">
                             <label for="recipient-name" class="control-label">分类名称:</label>
-                            <input type="text" class="form-control" id="recipient-name">
+                            <input type="text" name="name" class="form-control" id="recipient-name">
                         </div>
                         <div class="form-group">
                             <label for="message-text" class="control-label">分类别名:</label>
-                            <input class="form-control" id="message-text"></input>
+                            <input class="form-control" name="slug" id="message-text"></input>
                         </div>
                     </form>
                 </div>
@@ -176,18 +176,35 @@
                     // alert('点的编级');
                     //编辑的第二步
                     //1获取 要编辑的文章类别的名称和别名
-                    var categoryName = $('#recipient-name').val().trim();//文章分类名称
-                    var categorySlug = $('#message-text').val().trim();
-                    var categoryID = $('#categoryID').val().trim();
+                    // var categoryName = $('#recipient-name').val().trim();//文章分类名称
+                    // var categorySlug = $('#message-text').val().trim();   //文章别名
+                    // var categoryID = $('#categoryID').val().trim();       //文章分类 id  
+
+                    //上面这三句话是获取form表单中的数据
+                    //那如果上面不是三句话,是三十句话呢  按照上面的写法开获取会很累
+                    //用formData 来获取
+                    //因为formData可以一次性全部获取form表单拥有name属性的标签值
+                    // 但是formData需要后端支持才行
+                    // 使用jQuery就很贴心  jQuery就为我们提供一个serialize()方法.
+                    // 这个方法也是可以一次性的获取form表单中带有name属性标签的值得
+                    var data = $('#myModal form').serialize();
+                    // console.log(data);  // id=8name=啦啦啦666&slug=哈哈哈666;
+                    // return;
+
+
+
+
                     // 2发送ajax请求完成编辑
                     $.ajax({
                         type: 'post',
                         url: BigNew.category_edit,
-                        data: {
-                            id: categoryID,
-                            name: categoryName,
-                            slug: categorySlug
-                        },
+                        // data: {
+                        //     id: categoryID,
+                        //     name: categoryName,
+                        //     slug: categorySlug
+                        // },
+                        //传递的数据参数,是jQuery使用他的serialize()方法帮我们获取到的数据
+                        data: data,
                         success: function (backData) {
                             if (backData.code == 200) {
                                 // 3编辑成功后重新加载数据
